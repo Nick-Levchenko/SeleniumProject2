@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.base_page import BasePage
 
@@ -10,15 +11,21 @@ class SearchPage(BasePage):
     DECREASING_PRICE_FILTER = (By.ID, "Price_DESC")
     FIRST_ITEM = (By.XPATH, "//*[@data-ds-itemkey]")
     FIRST_ITEMS = f"(//*[@data-price-final and @data-bundlediscount])"
+    OPACITY_CONTAINER = (By.XPATH, "//*[@style='opacity: 0.5;']")
+
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.wait: WebDriverWait = WebDriverWait(driver, self.config.timeout(), poll_frequency=0.1)
 
     def __str__(self):
         return "Search Page"
 
     def sort_games_by_descending_price(self):
-        first_item = self.wait.until(EC.visibility_of_element_located(self.FIRST_ITEM))
+        self.wait.until(EC.visibility_of_element_located(self.FIRST_ITEM))
         self.wait.until(EC.element_to_be_clickable(self.SORTING_FILTER)).click()
         self.wait.until(EC.element_to_be_clickable(self.DECREASING_PRICE_FILTER)).click()
-        self.wait.until(EC.staleness_of(first_item))
+        self.wait.until(EC.visibility_of_element_located(self.OPACITY_CONTAINER))
+        self.wait.until(EC.invisibility_of_element(self.OPACITY_CONTAINER))
 
     def take_first_elements(self, number_of_elements):
         quantity_of_elements = f"[position()<{number_of_elements + 1}]"
