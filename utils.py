@@ -2,17 +2,18 @@ import json
 
 
 class ConfigReader:
-    CONFIG_FILE = r"C:\Users\leva0\PycharmProjects\SeleniumProject2\config.json"
+    CONFIG_FILE = "config.json"
 
-    def timeout(self):
+    def read_config(self, config_name):
         with open(self.CONFIG_FILE, 'r') as json_file:
             config = json.load(json_file)
-            return config['timeout']
+            return config[config_name]
 
 
-# сделал класс как-бы на "будущее", если понадобятся еще какие-то сортировки
-class ListSorter:
+class ListUtils:
 
     @staticmethod
     def sorting_by_descending(some_list):
         return some_list == sorted(some_list, reverse=True)
+
+

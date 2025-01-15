@@ -1,8 +1,9 @@
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from utils import ConfigReader
 
-
+config = ConfigReader()
 class Chrome(webdriver.Chrome):
     __instance = None
 
@@ -15,8 +16,8 @@ class Chrome(webdriver.Chrome):
 @pytest.fixture
 def driver():
     options = Options()
-    options.add_argument("--start-maximized")
+    options.add_argument(config.read_config('max_window_size'))
     driver = Chrome(options=options)
-    driver.get('https://store.steampowered.com/')
+    driver.get(config.read_config('url'))
     yield driver
     driver.quit()

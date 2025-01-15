@@ -10,7 +10,7 @@ class BasePage:
     def __init__(self, driver):
         self.config = ConfigReader()
         self.driver = driver
-        self.wait: WebDriverWait = WebDriverWait(driver, self.config.timeout())
+        self.wait: WebDriverWait = WebDriverWait(driver, self.config.read_config("timeout"))
 
-    def checking_the_page_opening(self):
-        return self.wait.until(EC.visibility_of_element_located(self.PAGE_LOADING_ELEMENT))
+    def wait_page_opening(self):
+        self.wait.until(EC.visibility_of_element_located(self.PAGE_LOADING_ELEMENT))
